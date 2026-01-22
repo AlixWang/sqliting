@@ -1,0 +1,116 @@
+{
+  "name": "sqliting",
+  "displayName": "SQLiting",
+  "description": "SQLite helper extension powered by a Rust sidecar.",
+  "version": "0.0.1",
+  "publisher": "sqliting",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onCommand:sqliting.openDatabase",
+    "onCommand:sqliting.runQuery",
+    "onCommand:sqliting.execute",
+    "onCommand:sqliting.showSidecarLogs",
+    "onCommand:sqliting.refreshSchema",
+    "onCommand:sqliting.previewTable",
+    "onCommand:sqliting.copyTableName",
+    "onCommand:sqliting.insertSelectTop50",
+    "onCommand:sqliting.exportLastResultCsv",
+    "onCommand:sqliting.copyLastResultJson",
+    "onView:sqliting.explorer"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "sqliting.openDatabase", "title": "SQLiting: Open Database..." },
+      { "command": "sqliting.runQuery", "title": "SQLiting: Run Query (Read)" },
+      { "command": "sqliting.execute", "title": "SQLiting: Execute (Write)" },
+      { "command": "sqliting.showSidecarLogs", "title": "SQLiting: Show Sidecar Logs" },
+      { "command": "sqliting.refreshSchema", "title": "SQLiting: Refresh Schema" },
+      { "command": "sqliting.previewTable", "title": "SQLiting: Preview Table" },
+      { "command": "sqliting.copyTableName", "title": "SQLiting: Copy Table Name" },
+      { "command": "sqliting.insertSelectTop50", "title": "SQLiting: Insert SELECT Top 50" },
+      { "command": "sqliting.exportLastResultCsv", "title": "SQLiting: Export Last Result (CSV)" },
+      { "command": "sqliting.copyLastResultJson", "title": "SQLiting: Copy Last Result (JSON)" }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "sqliting.explorer",
+          "name": "SQLiting"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "sqliting.refreshSchema",
+          "when": "view == sqliting.explorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "sqliting.previewTable",
+          "when": "view == sqliting.explorer && viewItem == sqliting.table",
+          "group": "inline"
+        },
+        {
+          "command": "sqliting.copyTableName",
+          "when": "view == sqliting.explorer && viewItem == sqliting.table",
+          "group": "navigation"
+        },
+        {
+          "command": "sqliting.insertSelectTop50",
+          "when": "view == sqliting.explorer && viewItem == sqliting.table",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SQLiting",
+      "properties": {
+        "sqliting.sidecar.path": {
+          "type": "string",
+          "default": "",
+          "description": "Override sqlite-helper binary path."
+        },
+        "sqliting.sidecar.logLevel": {
+          "type": "string",
+          "default": "info",
+          "enum": ["error", "warn", "info", "debug", "trace"],
+          "description": "Sidecar log level."
+        },
+        "sqliting.protocol.timeoutMs": {
+          "type": "number",
+          "default": 30000,
+          "description": "NDJSON request timeout in milliseconds."
+        },
+        "sqliting.query.maxRows": {
+          "type": "number",
+          "default": 1000,
+          "description": "Default max rows returned per query."
+        },
+        "sqliting.confirmWrites": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ask for confirmation before executing write queries."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -p . -w",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.5.4",
+    "@vscode/vsce": "^3.2.1"
+  }
+}
+

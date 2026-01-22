@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "crates/sqlite-helper",
+]
+
+resolver = "2"
+
